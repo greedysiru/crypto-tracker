@@ -1,6 +1,10 @@
-import { createGlobalStyle } from 'styled-components';
-import Router from './Router';
-import {ReactQueryDevtools} from 'react-query/devtools';
+import { createGlobalStyle } from "styled-components";
+import Router from "./Router";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { theme } from "./theme";
+import { ThemeProvider } from "styled-components";
+import React from "react";
 
 // 전역 스코프에 스타일을 주는 컴포넌트
 const GlobalStyle = createGlobalStyle`
@@ -58,8 +62,8 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     font-family: 'Source Sans Pro', sans-serif;
-    background-color: ${props => props.theme.bgColor};
-    color: ${props =>props.theme.textColor};
+    background-color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
   }
   a {
     text-decoration: none;
@@ -67,14 +71,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const queryClient = new QueryClient();
+
 function App() {
-  
   return (
-  <>
-    <GlobalStyle />
-    <Router />
-    <ReactQueryDevtools initialIsOpen={true} />
-  </>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <Router />
+          <ReactQueryDevtools initialIsOpen={true} />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </>
   );
 }
 
