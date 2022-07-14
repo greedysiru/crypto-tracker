@@ -11,7 +11,7 @@ import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 import { useQuery } from "react-query";
-import { Helmet } from "react-helmet";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 
 const Title = styled.h1`
   font-size: 48px;
@@ -199,12 +199,14 @@ function Coin() {
       <BackButton>
         <Link to={`/`}>Back</Link>
       </BackButton>
-      <Helmet>
-        {/* 해당 문서의 head로 가게 됨 */}
-        <title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </title>
-      </Helmet>
+      <HelmetProvider>
+        <Helmet>
+          {/* 해당 문서의 head로 가게 됨 */}
+          <title>
+            {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+          </title>
+        </Helmet>
+      </HelmetProvider>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
