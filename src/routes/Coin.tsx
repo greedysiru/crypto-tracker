@@ -81,6 +81,26 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
+const BackButton = styled.div`
+  position: absolute;
+  top: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: ${(props) => props.theme.textColor};
+  transition: color 0.2s ease-in;
+  &:hover {
+    color: ${(props) => props.theme.accentColor};
+  }
+  a {
+    vertical-align: sub;
+  }
+`;
+
 interface RouteParams {
   coinId: string;
 }
@@ -176,6 +196,9 @@ function Coin() {
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <BackButton>
+        <Link to={`/`}>Back</Link>
+      </BackButton>
       <Helmet>
         {/* 해당 문서의 head로 가게 됨 */}
         <title>
