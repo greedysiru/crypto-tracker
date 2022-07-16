@@ -240,7 +240,7 @@ function Coin() {
               <Chart coinId={coinId} />
             </Route>
             <Route path={`/${coinId}/price`}>
-              <Price />
+              <Price priceInfo={tickersData?.quotes.USD!} />
             </Route>
           </Switch>
         </>
