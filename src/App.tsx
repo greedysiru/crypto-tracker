@@ -3,8 +3,10 @@ import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { darkModeTheme, theme } from "./theme";
-import styled, { ThemeProvider } from "styled-components";
-import React, { useState } from "react";
+import { ThemeProvider } from "styled-components";
+import React from "react";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 // 전역 스코프에 스타일을 주는 컴포넌트
 const GlobalStyle = createGlobalStyle`
@@ -71,37 +73,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const DarkModeToggleButton = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 16px;
-  font-weight: 400;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: ${(props) => props.theme.textColor};
-  transition: color 0.2s ease-in;
-  span {
-    vertical-align: sub;
-  }
-`;
-
 const queryClient = new QueryClient();
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const toggleMode = () => setIsDarkMode((prev) => !prev);
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={isDarkMode ? darkModeTheme : theme}>
+        <ThemeProvider theme={isDark ? darkModeTheme : theme}>
           <GlobalStyle />
-          <DarkModeToggleButton onClick={toggleMode}>
-            <span>{isDarkMode ? "default" : "dark"}</span>
-          </DarkModeToggleButton>
           <Router />
           <ReactQueryDevtools initialIsOpen={true} />
         </ThemeProvider>

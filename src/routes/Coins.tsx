@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { fetchCoins } from "../api";
 import { useQuery } from "react-query";
 import { HelmetProvider, Helmet } from "react-helmet-async";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -54,6 +56,25 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
+const DarkModeToggleButton = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: ${(props) => props.theme.textColor};
+  transition: color 0.2s ease-in;
+  cursor: pointer;
+  span {
+    vertical-align: sub;
+  }
+`;
+
 interface ICoin {
   id: string;
   name: string;
@@ -71,7 +92,9 @@ function Coins() {
   // isLoading: 로딩 상태를 나타내는 Boolean
   // react Query가 데이터를 캐싱
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
-
+  // Setter Function: atom을 설정(set)하는 Function
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   return (
     <Container>
       <HelmetProvider>
@@ -82,6 +105,9 @@ function Coins() {
       </HelmetProvider>
       <Header>
         <Title>코인</Title>
+        <DarkModeToggleButton onClick={toggleDarkAtom}>
+          <span>Toggle Mode</span>
+        </DarkModeToggleButton>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
